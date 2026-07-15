@@ -1,5 +1,6 @@
 import "./styles.css";
 import { initAnimationKit } from "./animation-kit.js";
+import { initSplineScene } from "./spline-scene.js";
 import {
   createPublicClient,
   decodeEventLog,
@@ -383,5 +384,6 @@ function startTypewriter() {
 }
 
 initAnimationKit();
+initSplineScene();
 startTypewriter();
 setState("empty");

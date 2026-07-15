@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#07090d" />
+    <meta name="theme-color" content="#141414" />
     <meta name="description" content="Decode, inspect and replay Arc transactions before they surprise you." />
     <title>ArcReplay — Transaction time machine for Arc</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
     <div class="noise" aria-hidden="true"></div>
@@ -27,9 +27,13 @@
 
     <main id="top" data-page-entrance>
       <section class="hero shell">
-        <div class="hero-media" data-seamless-video aria-hidden="true">
-          <video muted playsinline preload="auto" tabindex="-1" disablepictureinpicture src="/assets/arc-fiber.mp4"></video>
-          <video muted playsinline preload="auto" tabindex="-1" disablepictureinpicture src="/assets/arc-fiber.mp4"></video>
+        <div class="hero-media" aria-hidden="true">
+          <canvas id="spline-scene" class="spline-scene"></canvas>
+          <div class="spline-fallback" data-seamless-video>
+            <video muted playsinline preload="auto" tabindex="-1" disablepictureinpicture src="/assets/arc-fiber.mp4"></video>
+            <video muted playsinline preload="auto" tabindex="-1" disablepictureinpicture src="/assets/arc-fiber.mp4"></video>
+          </div>
+          <div class="hero-media-shade"></div>
         </div>
         <div class="hero-copy">
           <div class="eyebrow"><span>LIVE</span> Transaction intelligence for Arc</div>
