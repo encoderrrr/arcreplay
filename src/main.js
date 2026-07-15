@@ -327,4 +327,29 @@ ui.exportTest.addEventListener("click", () => {
   URL.revokeObjectURL(link.href); toast("Viem replay test export shod.");
 });
 
+function startTypewriter() {
+  const element = document.querySelector(".typewriter");
+  const output = element?.querySelector("span");
+  const text = element?.dataset.text || "";
+  if (!element || !output) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    output.textContent = text;
+    return;
+  }
+  output.textContent = "";
+  element.classList.add("is-typing");
+  let index = 0;
+  window.setTimeout(() => {
+    const timer = window.setInterval(() => {
+      index += 1;
+      output.textContent = text.slice(0, index);
+      if (index >= text.length) {
+        window.clearInterval(timer);
+        window.setTimeout(() => element.classList.remove("is-typing"), 900);
+      }
+    }, 24);
+  }, 650);
+}
+
+startTypewriter();
 setState("empty");
