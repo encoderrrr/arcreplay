@@ -32,7 +32,10 @@
         </video>
         <div class="hero-copy">
           <div class="eyebrow"><span>LIVE</span> Transaction intelligence for Arc</div>
-          <h1>See what happened.<br /><em>Change it. Replay it.</em></h1>
+          <h1 aria-label="See what happened. Change it. Replay it.">
+            <span class="roll-line"><span>See what happened.</span></span>
+            <span class="roll-line roll-line-delay"><em>Change it. Replay it.</em></span>
+          </h1>
           <p>Turn opaque Arc transactions into a readable execution timeline. Decode memos, inspect transfers, catch failures and run a fresh preflight from one hash.</p>
           <form id="scan-form" class="hero-search" novalidate>
             <label for="tx-hash">Arc transaction hash</label>
