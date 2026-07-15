@@ -1,4 +1,5 @@
 import "./styles.css";
+import { initAnimationKit } from "./animation-kit.js";
 import {
   createPublicClient,
   decodeEventLog,
@@ -381,5 +382,6 @@ function startTypewriter() {
   }, 650);
 }
 
+initAnimationKit();
 startTypewriter();
 setState("empty");

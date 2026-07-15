@@ -25,11 +25,12 @@
       <span class="network-pill"><i></i> Arc Testnet</span>
     </header>
 
-    <main id="top">
+    <main id="top" data-page-entrance>
       <section class="hero shell">
-        <video class="hero-media" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1" disablepictureinpicture>
-          <source src="/assets/arc-fiber.mp4" type="video/mp4" />
-        </video>
+        <div class="hero-media" data-seamless-video aria-hidden="true">
+          <video muted playsinline preload="auto" tabindex="-1" disablepictureinpicture src="/assets/arc-fiber.mp4"></video>
+          <video muted playsinline preload="auto" tabindex="-1" disablepictureinpicture src="/assets/arc-fiber.mp4"></video>
+        </div>
         <div class="hero-copy">
           <div class="eyebrow"><span>LIVE</span> Transaction intelligence for Arc</div>
           <h1 aria-label="See what happened. Change it. Replay it.">
@@ -78,7 +79,14 @@
         </div>
       </section>
 
-      <section id="workspace" class="workspace shell" aria-live="polite">
+      <div class="motion-marquee" aria-label="ArcReplay capabilities">
+        <div class="motion-marquee-track">
+          <div class="motion-marquee-set"><span>ARC NATIVE</span><i></i><span>MEMO AWARE</span><i></i><span>READ ONLY</span><i></i><span>FINALITY READY</span><i></i><span>VIEM EXPORT</span><i></i></div>
+          <div class="motion-marquee-set" aria-hidden="true"><span>ARC NATIVE</span><i></i><span>MEMO AWARE</span><i></i><span>READ ONLY</span><i></i><span>FINALITY READY</span><i></i><span>VIEM EXPORT</span><i></i></div>
+        </div>
+      </div>
+
+      <section id="workspace" class="workspace shell" aria-live="polite" data-reveal>
         <div class="section-kicker">Replay workspace</div>
         <div class="section-heading">
           <div><h2>Transaction, without the guesswork.</h2><p id="workspace-subtitle">Load a transaction to generate its execution report.</p></div>
@@ -107,32 +115,32 @@
         </div>
 
         <div id="results" class="results" hidden>
-          <div class="summary-grid">
-            <article><span>Status</span><strong id="metric-status">—</strong><small id="metric-finality">Deterministic finality</small></article>
-            <article><span>Execution</span><strong id="metric-calls">—</strong><small>decoded actions</small></article>
-            <article><span>Asset flow</span><strong id="metric-value">—</strong><small id="metric-token">USDC transferred</small></article>
-            <article><span>Risk signals</span><strong id="metric-risks">—</strong><small>conservative checks</small></article>
+          <div class="summary-grid" data-stagger>
+            <article data-stagger-item data-spotlight data-lift><span>Status</span><strong id="metric-status">—</strong><small id="metric-finality">Deterministic finality</small></article>
+            <article data-stagger-item data-spotlight data-lift><span>Execution</span><strong id="metric-calls">—</strong><small>decoded actions</small></article>
+            <article data-stagger-item data-spotlight data-lift><span>Asset flow</span><strong id="metric-value">—</strong><small id="metric-token">USDC transferred</small></article>
+            <article data-stagger-item data-spotlight data-lift><span>Risk signals</span><strong id="metric-risks">—</strong><small>conservative checks</small></article>
           </div>
 
           <div class="report-grid">
-            <div class="timeline-panel panel">
+            <div class="timeline-panel panel" data-spotlight>
               <div class="panel-head"><div><span>EXECUTION TIMELINE</span><h3 id="tx-short">Transaction</h3></div><span id="tx-status-pill" class="status-pill">Confirmed</span></div>
               <div id="timeline" class="timeline"></div>
             </div>
 
             <aside class="detail-stack">
-              <div class="panel detail-panel">
+              <div class="panel detail-panel" data-spotlight>
                 <div class="panel-head"><div><span>TRANSACTION CONTEXT</span><h3>Onchain facts</h3></div></div>
                 <dl id="context-list" class="context-list"></dl>
               </div>
-              <div class="panel warning-panel">
+              <div class="panel warning-panel" data-spotlight>
                 <div class="panel-head"><div><span>GUARDRAILS</span><h3>Signals to review</h3></div></div>
                 <div id="warnings" class="warnings"></div>
               </div>
             </aside>
           </div>
 
-          <div class="replay-panel panel">
+          <div class="replay-panel panel" data-spotlight>
             <div class="panel-head"><div><span>REPLAY LAB</span><h3>Run the same call against current Arc state</h3><p>This is a read-only <code>eth_call</code>. Nothing is signed or submitted.</p></div><span class="safe-label">NO WALLET</span></div>
             <div class="replay-form">
               <label>From<input id="replay-from" spellcheck="false" /></label>
@@ -145,19 +153,19 @@
         </div>
       </section>
 
-      <section id="how" class="how shell">
+      <section id="how" class="how shell" data-reveal>
         <div class="section-kicker">One hash. Full context.</div>
         <div class="how-head"><h2>A flight recorder for<br />onchain money.</h2><p>ArcReplay turns RPC data, transfer logs and Arc-native memo events into one story your whole team can understand.</p></div>
-        <div class="steps">
-          <article><span>01</span><div class="step-icon">⌕</div><h3>Inspect</h3><p>Read the transaction, receipt and finalized block directly from Arc Testnet.</p></article>
-          <article><span>02</span><div class="step-icon">≋</div><h3>Decode</h3><p>Separate token movements, call data and memo context into ordered actions.</p></article>
-          <article><span>03</span><div class="step-icon">↻</div><h3>Replay</h3><p>Execute a read-only preflight against current state and surface a revert safely.</p></article>
-          <article><span>04</span><div class="step-icon">↗</div><h3>Export</h3><p>Copy an incident report or generate a reproducible Viem test starter.</p></article>
+        <div class="steps" data-stagger>
+          <article data-stagger-item data-spotlight data-lift><span>01</span><div class="step-icon">⌕</div><h3>Inspect</h3><p>Read the transaction, receipt and finalized block directly from Arc Testnet.</p></article>
+          <article data-stagger-item data-spotlight data-lift><span>02</span><div class="step-icon">≋</div><h3>Decode</h3><p>Separate token movements, call data and memo context into ordered actions.</p></article>
+          <article data-stagger-item data-spotlight data-lift><span>03</span><div class="step-icon">↻</div><h3>Replay</h3><p>Execute a read-only preflight against current state and surface a revert safely.</p></article>
+          <article data-stagger-item data-spotlight data-lift><span>04</span><div class="step-icon">↗</div><h3>Export</h3><p>Copy an incident report or generate a reproducible Viem test starter.</p></article>
         </div>
       </section>
     </main>
 
-    <footer class="footer shell">
+    <footer class="footer shell" data-reveal>
       <div class="brand"><span class="brand-mark"><i></i><i></i><i></i></span><span>Arc<span>Replay</span></span></div>
       <p>Transaction intelligence for Arc. Built for public testnet data.</p>
       <div><a href="https://docs.arc.io" target="_blank" rel="noreferrer">Arc docs</a><a href="https://testnet.arcscan.app" target="_blank" rel="noreferrer">Explorer</a><span>v0.1.0</span></div>
