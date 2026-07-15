@@ -176,7 +176,6 @@ function makeActions({ transaction, receipt, transfers, memos, memoInput }) {
 async function inspectTransaction(hash) {
   lastHash = hash;
   setState("loading");
-  document.querySelector("#workspace").scrollIntoView({ behavior: "smooth", block: "start" });
   ui.form.querySelector("button[type=submit]").disabled = true;
   try {
     setLoading("Reading Arc transaction", "Requesting public transaction data…");
@@ -307,13 +306,48 @@ console.log("Preflight passed:", result.data ?? "0x");
 `;
 }
 
+function playInspectCompanion() {
+  const companion = document.querySelector("#search-companion");
+  const video = document.querySelector("#search-companion-video");
+  if (!companion || !video) {
+    document.querySelector("#workspace").scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
+  window.clearTimeout(playInspectCompanion.fallback);
+  video.pause();
+  video.currentTime = 0;
+  companion.classList.remove("is-playing");
+  requestAnimationFrame(() => {
+    companion.classList.add("is-playing");
+    const playback = video.play();
+    if (playback) playback.catch(() => finishInspectCompanion());
+  });
+  playInspectCompanion.fallback = window.setTimeout(() => finishInspectCompanion(), 7000);
+}
+
+function finishInspectCompanion() {
+  const companion = document.querySelector("#search-companion");
+  const video = document.querySelector("#search-companion-video");
+  window.clearTimeout(playInspectCompanion.fallback);
+  companion?.classList.remove("is-playing");
+  video?.pause();
+  document.querySelector("#workspace").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+document.querySelector("#search-companion-video")?.addEventListener("ended", finishInspectCompanion);
+
 ui.form.addEventListener("submit", (event) => {
   event.preventDefault();
   const hash = ui.input.value.trim();
   if (!isHash(hash)) { toast("Yek transaction hash-e 66 characteri vared kon."); ui.input.focus(); return; }
+  playInspectCompanion();
   inspectTransaction(hash);
 });
-ui.demo.addEventListener("click", () => { ui.input.value = LIVE_DEMO_HASH; inspectTransaction(LIVE_DEMO_HASH); });
+ui.demo.addEventListener("click", () => {
+  ui.input.value = LIVE_DEMO_HASH;
+  inspectTransaction(LIVE_DEMO_HASH);
+  document.querySelector("#workspace").scrollIntoView({ behavior: "smooth", block: "start" });
+});
 ui.retry.addEventListener("click", () => lastHash && inspectTransaction(lastHash));
 ui.runReplay.addEventListener("click", runReplay);
 ui.copyReport.addEventListener("click", async () => {
@@ -332,10 +366,6 @@ function startTypewriter() {
   const output = element?.querySelector("span");
   const text = element?.dataset.text || "";
   if (!element || !output) return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    output.textContent = text;
-    return;
-  }
   output.textContent = "";
   element.classList.add("is-typing");
   let index = 0;
