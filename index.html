@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07090d" />
+    <meta name="description" content="Decode, inspect and replay Arc transactions before they surprise you." />
+    <title>ArcReplay — Transaction time machine for Arc</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+    <header class="nav shell">
+      <a class="brand" href="#top" aria-label="ArcReplay home">
+        <span class="brand-mark"><i></i><i></i><i></i></span>
+        <span>Arc<span>Replay</span></span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="#workspace">Workspace</a>
+        <a href="#how">How it works</a>
+        <a href="https://docs.arc.io/arc/concepts/transaction-memos" target="_blank" rel="noreferrer">Arc docs ↗</a>
+      </nav>
+      <span class="network-pill"><i></i> Arc Testnet</span>
+    </header>
+
+    <main id="top">
+      <section class="hero shell">
+        <div class="hero-copy">
+          <div class="eyebrow"><span>LIVE</span> Transaction intelligence for Arc</div>
+          <h1>See what happened.<br /><em>Change it. Replay it.</em></h1>
+          <p>Turn opaque Arc transactions into a readable execution timeline. Decode memos, inspect transfers, catch failures and run a fresh preflight from one hash.</p>
+          <form id="scan-form" class="hero-search" novalidate>
+            <label for="tx-hash">Arc transaction hash</label>
+            <div class="search-row">
+              <span class="search-icon">⌕</span>
+              <input id="tx-hash" name="txHash" autocomplete="off" spellcheck="false" placeholder="0x…" aria-describedby="input-help" />
+              <button class="primary-btn" type="submit"><span>Inspect transaction</span><b>→</b></button>
+            </div>
+            <div class="form-foot">
+              <span id="input-help">Read-only. No wallet connection required.</span>
+              <button id="demo-btn" class="text-btn" type="button">Load live memo transaction ↗</button>
+            </div>
+          </form>
+          <div class="trust-row" aria-label="Product attributes">
+            <span>✓ Public RPC only</span><span>✓ No signing</span><span>✓ Open source ready</span>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <div class="tx-card card-back">
+            <div class="mini-head"><span>ORIGINAL</span><b class="bad">FAILED</b></div>
+            <div class="mini-line"><i>01</i><span>Transfer 2,500 USDC</span><b>✓</b></div>
+            <div class="mini-line"><i>02</i><span>Attach payout memo</span><b>✓</b></div>
+            <div class="mini-line"><i>03</i><span>Settle treasury</span><b class="bad">×</b></div>
+          </div>
+          <div class="tx-card card-front">
+            <div class="mini-head"><span>REPLAY #02</span><b class="good">READY</b></div>
+            <div class="pulse-line"><span></span></div>
+            <div class="mini-line"><i>01</i><span>Transfer 2,500 USDC</span><b>✓</b></div>
+            <div class="mini-line"><i>02</i><span>Attach payout memo</span><b>✓</b></div>
+            <div class="mini-line active"><i>03</i><span>Settle treasury</span><b>✓</b></div>
+            <div class="state-diff"><span>STATE DIFF</span><b>3 changes</b><i>0 risks</i></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="workspace" class="workspace shell" aria-live="polite">
+        <div class="section-kicker">Replay workspace</div>
+        <div class="section-heading">
+          <div><h2>Transaction, without the guesswork.</h2><p id="workspace-subtitle">Load a transaction to generate its execution report.</p></div>
+          <div class="workspace-actions">
+            <button id="copy-report" class="ghost-btn" type="button" disabled>Copy report</button>
+            <button id="export-test" class="ghost-btn" type="button" disabled>Export test</button>
+            <a id="explorer-link" class="ghost-btn" href="https://testnet.arcscan.app" target="_blank" rel="noreferrer">Explorer ↗</a>
+          </div>
+        </div>
+
+        <div id="empty-state" class="empty-state">
+          <div class="empty-radar"><span></span><i></i></div>
+          <h3>Waiting for a transaction</h3>
+          <p>Paste any Arc Testnet transaction hash, or load the live memo example above.</p>
+        </div>
+
+        <div id="loading-state" class="loading-state" hidden>
+          <div class="loader-orb"></div>
+          <div><strong id="loading-title">Connecting to Arc Testnet</strong><span id="loading-detail">Reading transaction and receipt…</span></div>
+          <div class="loading-track"><i></i></div>
+        </div>
+
+        <div id="error-state" class="error-state" hidden>
+          <span>!</span><div><strong>Could not inspect this transaction</strong><p id="error-message"></p></div>
+          <button id="retry-btn" class="ghost-btn" type="button">Try again</button>
+        </div>
+
+        <div id="results" class="results" hidden>
+          <div class="summary-grid">
+            <article><span>Status</span><strong id="metric-status">—</strong><small id="metric-finality">Deterministic finality</small></article>
+            <article><span>Execution</span><strong id="metric-calls">—</strong><small>decoded actions</small></article>
+            <article><span>Asset flow</span><strong id="metric-value">—</strong><small id="metric-token">USDC transferred</small></article>
+            <article><span>Risk signals</span><strong id="metric-risks">—</strong><small>conservative checks</small></article>
+          </div>
+
+          <div class="report-grid">
+            <div class="timeline-panel panel">
+              <div class="panel-head"><div><span>EXECUTION TIMELINE</span><h3 id="tx-short">Transaction</h3></div><span id="tx-status-pill" class="status-pill">Confirmed</span></div>
+              <div id="timeline" class="timeline"></div>
+            </div>
+
+            <aside class="detail-stack">
+              <div class="panel detail-panel">
+                <div class="panel-head"><div><span>TRANSACTION CONTEXT</span><h3>Onchain facts</h3></div></div>
+                <dl id="context-list" class="context-list"></dl>
+              </div>
+              <div class="panel warning-panel">
+                <div class="panel-head"><div><span>GUARDRAILS</span><h3>Signals to review</h3></div></div>
+                <div id="warnings" class="warnings"></div>
+              </div>
+            </aside>
+          </div>
+
+          <div class="replay-panel panel">
+            <div class="panel-head"><div><span>REPLAY LAB</span><h3>Run the same call against current Arc state</h3><p>This is a read-only <code>eth_call</code>. Nothing is signed or submitted.</p></div><span class="safe-label">NO WALLET</span></div>
+            <div class="replay-form">
+              <label>From<input id="replay-from" spellcheck="false" /></label>
+              <label>Target<input id="replay-to" spellcheck="false" /></label>
+              <label class="data-field">Calldata<textarea id="replay-data" rows="3" spellcheck="false"></textarea></label>
+              <button id="run-replay" class="primary-btn" type="button">Run fresh preflight <b>→</b></button>
+            </div>
+            <div id="replay-result" class="replay-result" hidden></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="how" class="how shell">
+        <div class="section-kicker">One hash. Full context.</div>
+        <div class="how-head"><h2>A flight recorder for<br />onchain money.</h2><p>ArcReplay turns RPC data, transfer logs and Arc-native memo events into one story your whole team can understand.</p></div>
+        <div class="steps">
+          <article><span>01</span><div class="step-icon">⌕</div><h3>Inspect</h3><p>Read the transaction, receipt and finalized block directly from Arc Testnet.</p></article>
+          <article><span>02</span><div class="step-icon">≋</div><h3>Decode</h3><p>Separate token movements, call data and memo context into ordered actions.</p></article>
+          <article><span>03</span><div class="step-icon">↻</div><h3>Replay</h3><p>Execute a read-only preflight against current state and surface a revert safely.</p></article>
+          <article><span>04</span><div class="step-icon">↗</div><h3>Export</h3><p>Copy an incident report or generate a reproducible Viem test starter.</p></article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer shell">
+      <div class="brand"><span class="brand-mark"><i></i><i></i><i></i></span><span>Arc<span>Replay</span></span></div>
+      <p>Transaction intelligence for Arc. Built for public testnet data.</p>
+      <div><a href="https://docs.arc.io" target="_blank" rel="noreferrer">Arc docs</a><a href="https://testnet.arcscan.app" target="_blank" rel="noreferrer">Explorer</a><span>v0.1.0</span></div>
+    </footer>
+
+    <div id="toast" class="toast" role="status"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
