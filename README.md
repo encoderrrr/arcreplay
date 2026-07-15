@@ -2,6 +2,8 @@
 
 Transaction intelligence for Arc. ArcReplay turns an Arc Testnet transaction hash into a readable execution timeline, decodes Arc-native memo events, surfaces conservative review signals, and runs a read-only preflight against current chain state.
 
+**Live:** [arcreplay.vercel.app](https://arcreplay.vercel.app)
+
 ## What works in v0.1
 
 - Reads transactions, receipts, logs and finalized blocks from the public Arc Testnet RPC
